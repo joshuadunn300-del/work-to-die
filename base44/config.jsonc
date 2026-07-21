@@ -1,9 +1,9 @@
 {
   "name": "New App",
   "site": {
-    "installCommand": "npm install",
-    "buildCommand": "npm run build",
-    "serveCommand": "npm run dev",
-    "outputDirectory": "./dist"
+    "installCommand": "npm --prefix frontend install",
+    "buildCommand": "npm --prefix frontend run build",
+    "serveCommand": "npm --prefix frontend run dev",
+    "outputDirectory": "./frontend/dist"
   }
 }
