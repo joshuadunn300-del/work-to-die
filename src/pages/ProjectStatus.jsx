@@ -23,6 +23,11 @@ export default function ProjectStatus() {
       const res = await base44.functions.invoke('githubStatus', { mode: 'list' });
       setRepos(res.data.repos || []);
     } catch (e) {
+      const status = e.response?.status || e.status;
+      if (status === 401 || status === 403) {
+        base44.auth.redirectToLogin(window.location.href);
+        return;
+      }
       setError(e.response?.data?.error || e.message || 'Failed to load repositories');
     } finally {
       setLoadingRepos(false);
