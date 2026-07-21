@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "theme": { "primary": "#1D4ED8", "secondary": "#0F172A", "font": "Inter" },
+  "sections": [
+    {
+      "id": "navbar",
+      "type": "navbar",
+      "visible": true,
+      "props": {
+        "logo": "Rapid Flow Plumbing",
+        "links": ["Home", "Services", "About", "Reviews"],
+        "phone": "(555) 123-4567",
+        "ctaText": "Get a Quote",
+        "logoIcon": "droplets"
+      }
+    },
+    {
+      "id": "hero",
+      "type": "hero",
+      "visible": true,
+      "props": {
+        "eyebrow": "Licensed Local Plumbers · 24/7",
+        "headline": "24/7 Emergency Plumbing You Can Trust",
+        "subtext": "Licensed, insured, and on your doorstep in under an hour. Honest, upfront pricing and same-day callouts.",
+        "bgImage": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=1600&q=80&auto=format&fit=crop",
+        "ratingText": "From 2,000+ ratings",
+        "trustBadges": ["Licensed & Insured", "24/7 Emergency", "Upfront Pricing"],
+        "ctaText": "Call Now, 24/7",
+        "form": {
+          "title": "Request a Plumber",
+          "buttonText": "Get Help Now",
+          "fields": [
+            { "id": "name", "label": "Your name", "type": "text", "required": true },
+            { "id": "phone", "label": "Phone number", "type": "tel", "required": true },
+            { "id": "service", "label": "What do you need?", "type": "select", "options": ["Leak repair", "Drain cleaning", "Something else"] }
+          ]
+        }
+      }
+    },
+    {
+      "id": "services",
+      "type": "services",
+      "visible": true,
+      "props": {
+        "heading": "Plumbing services built around you",
+        "subheading": "Whatever the job, we handle it with care, precision and a workmanship guarantee.",
+        "items": [
+          { "icon": "droplets", "title": "Leak & pipe repair", "desc": "Fast diagnosis and fix for any leak, big or small." },
+          { "icon": "wrench", "title": "Drain cleaning", "desc": "Clear clogged drains without damaging your pipes." },
+          { "icon": "flame", "title": "Water heater install", "desc": "Same-day installation and replacement." }
+        ]
+      }
+    },
+    {
+      "id": "gallery",
+      "type": "gallery",
+      "visible": true,
+      "props": { "title": "Recent Jobs", "images": [] }
+    },
+    {
+      "id": "about",
+      "type": "about",
+      "visible": true,
+      "props": {
+        "heading": "Two decades of trusted craftsmanship",
+        "body": "Family-owned and operated since 2008. We've fixed thousands of pipes and never met a leak we couldn't beat. Every technician is licensed, insured and trained to treat your home like their own.",
+        "image": "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=900&q=80&auto=format&fit=crop",
+        "stats": [
+          { "value": "20+", "label": "Years experience" },
+          { "value": "12k", "label": "Jobs completed" },
+          { "value": "4.9★", "label": "Average rating" }
+        ]
+      }
+    },
+    {
+      "id": "testimonials",
+      "type": "testimonials",
+      "visible": true,
+      "props": {
+        "heading": "What Customers Say",
+        "items": [
+          { "quote": "Fixed my water heater same day, great price.", "name": "Maria G.", "role": "Homeowner" },
+          { "quote": "Professional and fast.", "name": "Tom R." }
+        ]
+      }
+    },
+    {
+      "id": "faq",
+      "type": "faq",
+      "visible": true,
+      "props": {
+        "heading": "FAQs",
+        "items": [
+          { "q": "Do you offer emergency service?", "a": "Yes, 24/7 with a 60 minute response window." },
+          { "q": "Are you licensed?", "a": "Fully licensed and insured in the state." }
+        ]
+      }
+    },
+    {
+      "id": "cta",
+      "type": "cta",
+      "visible": true,
+      "props": {
+        "heading": "Got a leak? Don't wait.",
+        "subtext": "Call now for same-day service.",
+        "buttonText": "Call (555) 123-4567"
+      }
+    },
+    {
+      "id": "footer",
+      "type": "footer",
+      "visible": true,
+      "props": {
+        "logo": "Rapid Flow Plumbing",
+        "tagline": "Trusted local plumbing, done right the first time.",
+        "phone": "(555) 123-4567",
+        "email": "hello@rapidflowplumbing.com",
+        "links": ["Home", "Services", "About", "Reviews"],
+        "copyright": "© 2026 Rapid Flow Plumbing. All rights reserved.",
+        "logoIcon": "droplets"
+      }
+    }
+  ]
+}
