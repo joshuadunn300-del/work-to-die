@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "theme": { "primary": "#B45309", "secondary": "#292524", "font": "Inter" },
+  "sections": [
+    {
+      "id": "navbar",
+      "type": "navbar",
+      "visible": true,
+      "props": {
+        "logo": "Summit Ridge Roofing & Exterior Restoration Specialists",
+        "links": ["Services", "Gallery", "Reviews", "FAQ", "Contact"],
+        "ctaText": "Free Inspection"
+      }
+    },
+    {
+      "id": "hero",
+      "type": "hero",
+      "visible": true,
+      "props": {
+        "headline": "Storm Damage? We Handle Insurance Claims From Start to Finish So You Don't Have To Lift a Finger",
+        "subtext": "Serving the tri-county area for over 25 years with GAF Master Elite certified installs.",
+        "ctaText": "Schedule Free Inspection"
+      }
+    },
+    {
+      "id": "services",
+      "type": "services",
+      "visible": true,
+      "props": {
+        "heading": "What We Do",
+        "items": [
+          { "title": "Roof Replacement", "desc": "Complete tear-off and replacement with a lifetime workmanship warranty backed in writing." },
+          { "title": "Storm Damage Repair", "desc": "Free inspections and we deal directly with your insurance adjuster." }
+        ]
+      }
+    },
+    {
+      "id": "gallery",
+      "type": "gallery",
+      "visible": true,
+      "props": { "title": "Before & After", "images": [] }
+    },
+    {
+      "id": "about",
+      "type": "about",
+      "visible": false,
+      "props": { "heading": "About Us", "body": "Hidden section — should not render." }
+    },
+    {
+      "id": "testimonials",
+      "type": "testimonials",
+      "visible": true,
+      "props": { "heading": "Reviews", "items": [] }
+    },
+    {
+      "id": "faq",
+      "type": "faq",
+      "visible": true,
+      "props": {
+        "heading": "Common Questions",
+        "items": [
+          { "q": "Will you work directly with my insurance company?", "a": "Yes, we manage the entire claims process and meet the adjuster on-site." }
+        ]
+      }
+    },
+    {
+      "id": "cta",
+      "type": "cta",
+      "visible": true,
+      "props": { "heading": "Get a free roof inspection this week", "buttonText": "Book Now" }
+    },
+    {
+      "id": "unknown_future_section",
+      "type": "carousel_v2",
+      "visible": true,
+      "props": { "note": "Should be silently skipped by the renderer." }
+    },
+    {
+      "id": "footer",
+      "type": "footer",
+      "visible": true,
+      "props": {
+        "logo": "Summit Ridge Roofing",
+        "links": []
+      }
+    }
+  ]
+}

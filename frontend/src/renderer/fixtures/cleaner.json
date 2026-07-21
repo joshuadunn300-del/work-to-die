@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "theme": { "primary": "#0D9488" },
+  "sections": [
+    { "id": "navbar", "type": "navbar", "visible": true, "props": { "logo": "Sparkle Clean Co" } },
+    {
+      "id": "hero",
+      "type": "hero",
+      "visible": true,
+      "props": {
+        "headline": "Spotless Homes, Stress-Free You"
+      }
+    },
+    {
+      "id": "services",
+      "type": "services",
+      "visible": true,
+      "props": {
+        "items": [
+          { "title": "Deep Cleaning" },
+          { "title": "Move-Out Cleaning", "desc": "Get your full deposit back." },
+          { "title": "Recurring Cleaning" },
+          { "title": "Office Cleaning" }
+        ]
+      }
+    },
+    { "id": "gallery", "type": "gallery", "visible": true, "props": {} },
+    { "id": "about", "type": "about", "visible": true, "props": { "body": "We've cleaned over 10,000 homes with a 5-star average rating." } },
+    {
+      "id": "testimonials",
+      "type": "testimonials",
+      "visible": true,
+      "props": {
+        "items": [
+          { "quote": "They were fantastic and thorough.", "name": "Priya S." }
+        ]
+      }
+    },
+    { "id": "faq", "type": "faq", "visible": true, "props": {} },
+    { "id": "cta", "type": "cta", "visible": true, "props": {} },
+    { "id": "footer", "type": "footer", "visible": true, "props": {} }
+  ]
+}

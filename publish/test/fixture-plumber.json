@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "site_id": "site_plumber_001",
+  "theme": { "primary": "#1D4ED8", "secondary": "#0F172A", "font": "Inter", "siteTitle": "Rapid Flow Plumbing" },
+  "sections": [
+    { "id": "navbar", "type": "navbar", "visible": true, "props": {
+      "logo": "Rapid Flow Plumbing",
+      "links": [{ "label": "Services", "href": "#services" }, { "label": "About", "href": "#about" }, { "label": "Contact", "href": "#cta" }],
+      "ctaText": "Call Now", "ctaHref": "tel:5551234567"
+    }},
+    { "id": "hero", "type": "hero", "visible": true, "props": {
+      "headline": "24/7 Emergency Plumbing You Can Trust",
+      "subheadline": "Licensed, insured, and on your doorstep in under an hour.",
+      "ctaText": "Get a Free Quote", "ctaHref": "#cta",
+      "backgroundImage": "",
+      "form": { "enabled": true, "submitText": "Request a Quote", "fields": [
+        { "name": "name", "label": "Name", "type": "text" },
+        { "name": "phone", "label": "Phone", "type": "tel" },
+        { "name": "email", "label": "Email", "type": "email" }
+      ]}
+    }},
+    { "id": "services", "type": "services", "visible": true, "props": {
+      "heading": "What We Do",
+      "items": [
+        { "title": "Drain Cleaning", "description": "Fast, thorough clearing for stubborn clogs." },
+        { "title": "Water Heater Repair", "description": "Same-day repair and replacement." },
+        { "title": "Leak Detection", "description": "Non-invasive diagnostics that save your walls." }
+      ]
+    }},
+    { "id": "gallery", "type": "gallery", "visible": true, "props": {
+      "heading": "Our Work",
+      "images": [
+        { "src": "https://example.com/img1.jpg", "alt": "Repaired water heater" },
+        { "src": "https://example.com/img2.jpg", "alt": "Van on site" }
+      ]
+    }},
+    { "id": "about", "type": "about", "visible": true, "props": {
+      "heading": "About Rapid Flow",
+      "body": "Family-owned and operated since 2004, serving the greater metro area with honest pricing and fast response times.",
+      "image": "https://example.com/team.jpg"
+    }},
+    { "id": "testimonials", "type": "testimonials", "visible": true, "props": {
+      "heading": "What Clients Say",
+      "items": [
+        { "name": "Jamie R.", "quote": "Fixed my burst pipe at 2am. Lifesavers.", "rating": 5 },
+        { "name": "Alex T.", "quote": "Fair pricing and fast.", "rating": 4 }
+      ]
+    }},
+    { "id": "faq", "type": "faq", "visible": true, "props": {
+      "heading": "Frequently Asked Questions",
+      "items": [
+        { "question": "Do you offer emergency service?", "answer": "Yes, 24/7, 365 days a year." },
+        { "question": "Are you licensed and insured?", "answer": "Fully licensed and insured in the state." }
+      ]
+    }},
+    { "id": "cta", "type": "cta", "visible": true, "props": {
+      "heading": "Ready to fix it right the first time?",
+      "subheading": "Call now for a free estimate.",
+      "buttonText": "Call (555) 123-4567", "buttonHref": "tel:5551234567"
+    }},
+    { "id": "footer", "type": "footer", "visible": true, "props": {
+      "businessName": "Rapid Flow Plumbing",
+      "address": "123 Main St, Springfield",
+      "phone": "(555) 123-4567",
+      "email": "hello@rapidflowplumbing.com",
+      "links": [{ "label": "Privacy", "href": "#" }]
+    }}
+  ]
+}

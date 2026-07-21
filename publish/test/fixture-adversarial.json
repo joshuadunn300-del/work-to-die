@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "site_id": "site_adv_001",
+  "theme": { "primary": "not-a-color", "secondary": "", "font": "Comic Sans\"; } body { display:none} /*" },
+  "sections": [
+    { "id": "navbar", "type": "navbar", "visible": true, "props": {
+      "logo": "<script>alert(1)</script> Joe's \"Plumbing\" & <b>Sons</b>",
+      "links": [{ "label": "Home\" onmouseover=\"alert(2)", "href": "javascript:alert(3)" }]
+    }},
+    { "id": "hero", "type": "hero", "visible": true, "props": {
+      "headline": "Very long headline that goes on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on to test overflow handling in the CSS layout system without breaking anything",
+      "form": { "enabled": true, "fields": [] }
+    }},
+    { "id": "services", "type": "services", "visible": true, "props": { "items": [] } },
+    { "id": "unknown_section", "type": "carousel3000", "visible": true, "props": { "foo": "bar" } },
+    { "id": "gallery", "type": "gallery", "visible": true, "props": {
+      "images": [
+        { "src": "https://example.com/huge-image-that-is-a-very-long-url-to-simulate-a-massive-cdn-path-with-lots-of-query-params.jpg?w=8000&h=8000&q=100&sig=abcdefghijklmnopqrstuvwxyz0123456789", "alt": "<img src=x onerror=alert(4)>" }
+      ]
+    }},
+    { "id": "about", "type": "about", "visible": false, "props": { "heading": "Hidden section should not render" } },
+    { "id": "cta", "type": "cta", "visible": true, "props": { "heading": "\"><script>alert(5)</script>" } },
+    { "id": "footer", "type": "footer", "visible": true, "props": { "businessName": "Test' OR '1'='1" } }
+  ]
+}

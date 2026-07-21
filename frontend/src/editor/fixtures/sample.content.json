@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "theme": { "primary": "#9D174D", "secondary": "#15171f", "font": "Inter" },
+  "sections": [
+    { "id": "navbar", "type": "navbar", "visible": true, "props": {
+      "logo": "Rick's Plumbing",
+      "links": [{ "label": "Services", "href": "#services" }, { "label": "About", "href": "#about" }, { "label": "Contact", "href": "#cta" }],
+      "cta": { "label": "Get a Quote", "href": "#hero" }
+    }},
+    { "id": "hero", "type": "hero", "visible": true, "props": {
+      "headline": "Fast, Reliable Plumbing You Can Trust",
+      "subheadline": "24/7 emergency service across the metro area.",
+      "form": { "enabled": true, "fields": ["name", "phone", "message"], "submitLabel": "Get a Free Quote" }
+    }},
+    { "id": "services", "type": "services", "visible": true, "props": {
+      "title": "What We Do", "items": [
+        { "title": "Drain Cleaning", "description": "Fast clog removal, same-day service." },
+        { "title": "Water Heater Repair", "description": "Install and repair all major brands." },
+        { "title": "Emergency Leaks", "description": "24/7 dispatch for burst pipes." }
+      ]
+    }},
+    { "id": "gallery", "type": "gallery", "visible": true, "props": {
+      "title": "Recent Work", "images": [
+        { "src": "https://picsum.photos/seed/nova1/600/600", "alt": "Job 1" },
+        { "src": "https://picsum.photos/seed/nova2/600/600", "alt": "Job 2" },
+        { "src": "https://picsum.photos/seed/nova3/600/600", "alt": "Job 3" }
+      ]
+    }},
+    { "id": "about", "type": "about", "visible": true, "props": {
+      "title": "About Rick's Plumbing", "body": "Family-owned and operated since 2004. Licensed, bonded, insured."
+    }},
+    { "id": "testimonials", "type": "testimonials", "visible": true, "props": {
+      "title": "What Customers Say", "items": [
+        { "quote": "Showed up in 20 minutes on a Sunday.", "author": "Dana R." },
+        { "quote": "Fair pricing, no upsell nonsense.", "author": "Marcus T." }
+      ]
+    }},
+    { "id": "faq", "type": "faq", "visible": true, "props": {
+      "title": "FAQ", "items": [
+        { "question": "Do you offer emergency service?", "answer": "Yes, 24/7 dispatch." },
+        { "question": "Do you serve my area?", "answer": "We cover the whole metro area." }
+      ]
+    }},
+    { "id": "cta", "type": "cta", "visible": true, "props": {
+      "headline": "Ready to fix it right the first time?", "subheadline": "", "button": { "label": "Call Now", "href": "tel:+15551234567" }
+    }},
+    { "id": "footer", "type": "footer", "visible": true, "props": {
+      "logo": "Rick's Plumbing", "text": "© 2026 Rick's Plumbing. All rights reserved.", "links": [], "social": []
+    }}
+  ]
+}

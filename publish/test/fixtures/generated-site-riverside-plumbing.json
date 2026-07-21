@@ -1,0 +1,60 @@
+{
+  "_note": "SIMULATED generateSite output. Mirrors Terminal 1's real BUILD-LOG'd generateSite test (business_name 'Riverside Plumbing Co', industry 'plumbing', location 'Austin TX') in shape and business context, but this JSON was authored by Terminal 5 to exercise the exit test end-to-end — it is NOT a literal copy of T1's raw LLM output, which wasn't recorded verbatim in BUILD-LOG.",
+  "version": 1,
+  "site_id": "site_exit_test_riverside",
+  "theme": { "primary": "#1D4ED8", "secondary": "#0F172A", "font": "Inter", "siteTitle": "Riverside Plumbing Co" },
+  "sections": [
+    { "id": "navbar", "type": "navbar", "visible": true, "props": {
+      "logo": "Riverside Plumbing Co",
+      "links": [{ "label": "Services", "href": "#services" }, { "label": "About", "href": "#about" }, { "label": "Contact", "href": "#cta" }],
+      "ctaText": "Call Now", "ctaHref": "tel:5550112234"
+    }},
+    { "id": "hero", "type": "hero", "visible": true, "props": {
+      "headline": "Austin's Trusted Plumbers, On Call 24/7",
+      "subheadline": "Fast, honest plumbing repairs for homes and businesses across Austin.",
+      "ctaText": "Get a Free Quote", "ctaHref": "#cta",
+      "form": { "enabled": true, "submitText": "Request a Quote", "fields": [
+        { "name": "name", "label": "Name", "type": "text" },
+        { "name": "phone", "label": "Phone", "type": "tel" },
+        { "name": "email", "label": "Email", "type": "email" }
+      ]}
+    }},
+    { "id": "services", "type": "services", "visible": true, "props": {
+      "heading": "What We Do",
+      "items": [
+        { "title": "Drain Cleaning", "description": "Fast, thorough clearing for stubborn clogs." },
+        { "title": "Water Heater Repair", "description": "Same-day repair and replacement." },
+        { "title": "Leak Detection", "description": "Non-invasive diagnostics that save your walls." }
+      ]
+    }},
+    { "id": "gallery", "type": "gallery", "visible": true, "props": {
+      "heading": "Recent Jobs",
+      "images": [{ "src": "https://picsum.photos/seed/riverside1/640/480", "alt": "Completed plumbing job" }]
+    }},
+    { "id": "about", "type": "about", "visible": true, "props": {
+      "heading": "About Riverside Plumbing",
+      "body": "Family-owned and operated in Austin, TX, serving the metro area with honest pricing and fast response times.",
+      "image": "https://picsum.photos/seed/riverside2/640/480"
+    }},
+    { "id": "testimonials", "type": "testimonials", "visible": true, "props": {
+      "heading": "What Clients Say",
+      "items": [{ "name": "Dana R.", "quote": "Fixed my water heater same day. Great service.", "rating": 5 }]
+    }},
+    { "id": "faq", "type": "faq", "visible": true, "props": {
+      "heading": "Frequently Asked Questions",
+      "items": [{ "question": "Do you offer emergency service?", "answer": "Yes, 24/7." }]
+    }},
+    { "id": "cta", "type": "cta", "visible": true, "props": {
+      "heading": "Ready to fix it right the first time?",
+      "subheading": "Call now for a free estimate.",
+      "buttonText": "Call (555) 011-2234", "buttonHref": "tel:5550112234"
+    }},
+    { "id": "footer", "type": "footer", "visible": true, "props": {
+      "businessName": "Riverside Plumbing Co",
+      "address": "482 Elm St, Austin, TX",
+      "phone": "(555) 011-2234",
+      "email": "hello@riversideplumbing.example",
+      "links": [{ "label": "Privacy", "href": "#" }]
+    }}
+  ]
+}

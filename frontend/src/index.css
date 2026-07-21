@@ -1,0 +1,761 @@
+@import "tailwindcss";
+
+/* Tenji's app UI is permanently dark, not OS-theme-adaptive — force Tailwind's
+   `dark:` variant on via a class instead of `prefers-color-scheme` (index.html
+   sets `class="dark"` on <html>; Settings.jsx's Dark/Light toggle flips it). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/space-grotesk/700.css";
+
+/* ============================================================================
+   NOVA APP-CHROME DESIGN TOKENS — exact values pulled from Josh's real Tenji
+   bundle (frontend/src/lib/designTokens.js `appChrome` + tenji-tokens.md).
+   This is Nova's OWN APP CHROME ONLY — dashboard, sidebar, editor shell, tool
+   pages. It must NEVER apply to generated client-site output
+   (renderer/SiteRenderer.jsx + sections/*.jsx), which is driven by
+   `lib/designTokens.js`'s separate `generatedSite` token set instead — see
+   renderer/theme.js and the `.nova-site-render` opt-out below. Two separate
+   brand systems, don't conflate them (#9D174D is a generated-SITE brand color,
+   not an app token — that conflation is what the earlier reconciliation fixed).
+
+   Two token layers, both usable directly as Tailwind utilities:
+   1. `--color-nova-*` — legacy names, 24+ files across the app already use
+      them (bg-nova-accent, text-nova-text-muted, border-nova-border, etc).
+   2. Raw shadcn/ui-convention HSL triplets under `.dark`, exposed as
+      `--color-background/-foreground/-card/-primary/...` — Tenji's own
+      literal class names (bg-background, text-muted-foreground, border-input,
+      ring-ring, bg-sidebar, etc). The nova-* layer derives its 5 core colors
+      from these so there's exactly one source of truth, no hex drift.
+   ============================================================================ */
+.dark {
+  --background: 240 20% 1%;
+  --foreground: 0 0% 100%;
+  --card: 240 14% 4%;
+  --primary: 335 90% 56%; /* #F2386F */
+  --secondary: 340 10% 8%;
+  --muted: 340 10% 8%;
+  --muted-foreground: 330 8% 60%;
+  --accent: 348 100% 78%;
+  --border: 335 15% 12%;
+  --input: 335 15% 12%;
+  --ring: 335 90% 56%;
+  --sidebar-background: 240 14% 4%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-primary: 335 90% 50%;
+  --sidebar-accent: 240 10% 8%;
+  --sidebar-border: 240 10% 12%;
+  --sidebar-ring: 335 90% 50%;
+}
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-primary: hsl(var(--primary));
+  --color-secondary: hsl(var(--secondary));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* Legacy nova-* names — derive from the exact tokens above, no separate hex. */
+  --color-nova-accent: #f2386f; /* hsl(335 90% 56%) — the real Tenji pink, 13 uses in bundle */
+  --color-nova-accent-bright: #ff5c99;
+  --color-nova-accent-soft: #ff8fb0;
+  --color-nova-accent-pale: #ffd1e0;
+  --color-nova-accent-deep: #db2777;
+  --color-nova-bg-raised: #0a0b10;
+  --color-nova-surface-hover: #22222f;
+  --radius-nova: 1rem; /* --radius base from the real bundle */
+  --color-nova-bg: hsl(var(--background));
+  --color-nova-surface: hsl(var(--card));
+  --color-nova-border: hsl(var(--border));
+  --color-nova-text: hsl(var(--foreground));
+  --color-nova-text-muted: hsl(var(--muted-foreground));
+
+  /* Tailwind v4 generates font-* utilities from --font-* theme keys — `font-display`
+     is used as a literal className in the real decompiled bundle. */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-heading: 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+/* Overscroll-fix (Josh caught live, 2026-07-21): rubber-band overscroll showed the
+   browser's default WHITE page background above the app since <html> never had one set
+   (only body did, and body's own box doesn't extend into the overscroll region). Setting
+   it on html too closes that gap; overscroll-behavior-y stops the bounce reaching past our
+   own content entirely, matching Tenji's dark overscroll on every route including "/". */
+html {
+  background-color: #08080c;
+  overscroll-behavior-y: none;
+  scroll-behavior: smooth;
+}
+
+/* App background: near-black w/ faint pink grid, per spec. */
+body {
+  font-family: var(--font-sans);
+  color: hsl(var(--foreground));
+  background: linear-gradient(160deg, #050505, #0b0b0f);
+  background-attachment: fixed;
+  overscroll-behavior-y: none;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(242, 56, 111, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242, 56, 111, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+/* White top strip (Josh caught live, 2026-07-21): #root had no explicit background or
+   guaranteed full-height box — html/body were already dark, but #root itself could still
+   let the browser's white default paint through at the very top edge on some layouts
+   (e.g. before the app's own flex/min-h-screen wrapper measures in, or on any page whose
+   top-level element doesn't itself stretch to 100vh). Painting #root dark directly and
+   forcing it to at least full viewport height removes the gap regardless of what's inside. */
+html, body, #root {
+  height: 100%;
+  min-height: 100%;
+}
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  background-color: #050505;
+}
+
+.font-nova-heading {
+  font-family: var(--font-heading);
+}
+
+/* Real Tenji uses Space Grotesk for EVERY heading, not opt-in per-component.
+   `.nova-site-render` (SiteRenderer's wrapper) opts back out — generated
+   client sites keep each site's own independent `theme.font` on their own
+   headings, this must not leak Nova's app-chrome typography onto them. */
+h1, h2, h3 {
+  font-family: var(--font-heading);
+}
+.nova-site-render h1,
+.nova-site-render h2,
+.nova-site-render h3 {
+  font-family: inherit;
+}
+
+/* Pink "glow" elevation — the signature app-chrome look, hsl(335 90% 56%) = accent. */
+.nova-glow-focus {
+  box-shadow: 0 0 0 3px hsl(335 90% 56% / 0.18), 0 0 28px hsl(335 90% 56% / 0.22);
+}
+.nova-glow-strong {
+  box-shadow: 0 0 18px 3px hsl(335 90% 56% / 0.7);
+}
+.nova-glow-soft {
+  box-shadow: 0 0 12px hsl(335 90% 56% / 0.3);
+}
+
+/* Faint pink grid + floating particle dots — apply to any full-bleed app-chrome
+   surface that wants the radial-glow variant instead of the flat body grid
+   (dashboard hero, auth pages, etc). */
+.nova-dojo-bg {
+  position: relative;
+  background-color: var(--color-nova-bg);
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(242, 56, 111, 0.10), transparent 40%),
+    radial-gradient(circle at 85% 70%, rgba(219, 39, 119, 0.12), transparent 45%),
+    radial-gradient(circle at 60% 15%, rgba(242, 56, 111, 0.05), transparent 30%),
+    linear-gradient(rgba(242, 56, 111, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242, 56, 111, 0.05) 1px, transparent 1px);
+  background-size: auto, auto, auto, 48px 48px, 48px 48px;
+}
+
+/* Large low-opacity kanji watermark (天 = "Tenji"/"heaven" in the original;
+   override the character via --nova-kanji-char if a screen wants a different one). */
+.nova-kanji-watermark {
+  position: relative;
+  overflow: hidden;
+}
+.nova-kanji-watermark::after {
+  content: var(--nova-kanji-char, '天');
+  position: absolute;
+  right: -0.1em;
+  bottom: -0.25em;
+  font-size: 14rem;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--color-nova-accent);
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Sidebar active-item recipe: data-active="true" gets a soft accent wash +
+   accent-toned text. Tailwind's data-* variant reads the DOM attribute
+   directly — whichever nav link sets data-active="true" picks this up with
+   zero extra classes. */
+.nova-sidebar-item[data-active='true'] {
+  background-color: hsl(var(--accent) / 0.5);
+  color: hsl(var(--sidebar-foreground));
+}
+
+/* Frosted-glass card — the base surface for every panel/card in the app. */
+.nova-card {
+  background: linear-gradient(165deg, rgba(30, 22, 30, 0.7), rgba(18, 14, 20, 0.7));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 1.25rem; /* 20px, within spec's 16-24px range */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+.nova-card-active {
+  border-color: rgba(242, 56, 111, 0.5);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(242, 56, 111, 0.25), 0 0 24px rgba(242, 56, 111, 0.25);
+}
+
+/* Sidebar nav pill — wide rounded, deep-plum fill, pink left bar, glow. */
+/* Exact values from reference/tenji-computed-styles.md (getComputedStyle against the
+   real live sidebar, 2026-07-21) — NOT the pill/capsule shape assumed earlier. Real
+   Tenji nav rows are a 12px-radius rounded rect (rounded-xl), not rounded-full. */
+.nova-nav-pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgb(161, 145, 153);
+  transition: background-color 0.15s, color 0.15s;
+}
+.nova-nav-pill:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #fff;
+}
+.nova-nav-pill-active {
+  font-weight: 500;
+  background: linear-gradient(rgba(244, 42, 126, 0.16), rgba(244, 42, 126, 0.08));
+  color: rgb(255, 143, 165);
+}
+.nova-nav-pill-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.375rem;
+  bottom: 0.375rem;
+  width: 2px;
+  border-radius: 9999px;
+  background: rgb(245, 61, 138);
+}
+
+/* Circular credits progress ring — sidebar footer. Draws via conic-gradient,
+   pct is set inline per-instance (style="--pct: 62"). */
+.nova-credit-ring {
+  --pct: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: conic-gradient(var(--color-nova-accent) calc(var(--pct) * 1%), rgba(255, 255, 255, 0.08) 0);
+}
+.nova-credit-ring-inner {
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 9999px;
+  background: #0b0b0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--color-nova-text);
+}
+
+/* Buttons */
+/* Exact values from reference/tenji-computed-styles.md — real Tenji's primary button is
+   rounded-xl (12px), NOT rounded-full, with a 3-stop diagonal gradient and a 3-layer
+   shadow (glow + drop + inset highlight), not the earlier 2-stop guess. */
+.nova-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 12px;
+  padding: 10px 24px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, rgb(243, 22, 114), rgb(245, 61, 138) 50%, rgb(255, 82, 116));
+  box-shadow:
+    rgba(244, 42, 126, 0.25) 0px 0px 18px 0px,
+    rgba(0, 0, 0, 0.4) 0px 4px 14px 0px,
+    rgba(255, 255, 255, 0.18) 0px 1px 0px 0px inset;
+  transition: filter 0.15s;
+}
+.nova-btn-primary:hover {
+  filter: brightness(1.08);
+}
+.nova-btn-primary:disabled {
+  opacity: 0.5;
+  box-shadow: none;
+}
+/* Verified via getComputedStyle against a live tenji.ai secondary button (Export CSV):
+   rounded-xl (12px), NOT a full pill, regular weight, 10px/16px padding. */
+.nova-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border-radius: 0.75rem;
+  padding: 0.625rem 1rem;
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--color-nova-text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Icon tile — hot-pink gradient rounded square for stat cards / quick actions. */
+/* Exact values from reference/tenji-computed-styles.md + direct probe of the $ (Recurring
+   Revenue) tile, 2026-07-21: 48px, 16px radius, 3-stop gradient, 2-layer shadow — was a
+   44px/14px/2-stop/1-layer guess before. */
+.nova-icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: linear-gradient(150deg, rgb(246, 49, 131) 0%, rgb(233, 12, 104) 55%, rgb(255, 71, 108) 100%);
+  box-shadow: rgba(242, 13, 108, 0.4) 0px 6px 18px 0px, rgba(255, 255, 255, 0.4) 0px 1px 0px 0px inset;
+  color: #fff;
+}
+/* Muted variant — real Tenji dashboard's smaller PERFORMANCE stat tiles (Total Leads,
+   Contacted, Interested, Closed, Active Clients, Open Tasks) and the Credits Left tile use
+   a dark, low-emphasis tile (36px, 12px radius, dark gradient, muted icon), not the pink
+   gradient treatment — only Recurring Revenue and Quick Actions keep that. Exact values,
+   reference/tenji-computed-styles.md direct probe of the "Total Leads" tile. */
+.nova-icon-tile-muted {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgb(25, 25, 31), rgb(15, 15, 20));
+  box-shadow: none;
+  color: rgb(116, 99, 107); /* exact icon stroke color, reference/tenji-computed-styles.md probe */
+}
+
+/* Hero badge pill (e.g. "天 · Nova") */
+.nova-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(242, 56, 111, 0.12);
+  border: 1px solid rgba(242, 56, 111, 0.3);
+  color: var(--color-nova-accent);
+}
+/* Compact outlined variant — sidebar "LIVE EDITOR" tag. Same soft-outline recipe as
+   .nova-badge-pill (never a solid fill), just smaller for an inline nav-row badge. */
+/* Quick Action card — exact values, live probe of "Generate Leads" tenji.ai/app, 2026-07-21. */
+.nova-action-card {
+  border-radius: 16px;
+  padding: 20px;
+  background: linear-gradient(180deg, rgb(11, 11, 15) 0%, rgb(9, 9, 12) 100%);
+  box-shadow: rgba(255, 255, 255, 0.07) 0px 0px 0px 1px, rgba(0, 0, 0, 0.4) 0px 8px 24px 0px;
+}
+.nova-action-card-title {
+  margin-top: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+.nova-action-card-desc {
+  margin-top: 4px;
+  font-size: 14px;
+  color: rgb(161, 145, 153);
+}
+.nova-action-cost-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(244, 42, 126, 0.1);
+  color: rgb(255, 143, 165);
+  border: 1px solid rgba(244, 42, 126, 0.25);
+}
+.nova-icon-tile-action {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: linear-gradient(150deg, rgb(246, 49, 131) 0%, rgb(233, 12, 104) 50%, rgb(255, 71, 108) 100%);
+  box-shadow:
+    rgba(242, 13, 108, 0.35) 0px 4px 14px 0px,
+    rgba(244, 42, 126, 0.28) 0px 0px 18px 0px,
+    rgba(255, 255, 255, 0.4) 0px 1px 0px 0px inset,
+    rgba(145, 8, 65, 0.5) 0px -2px 6px 0px inset;
+  color: #fff;
+}
+
+.nova-badge-pill-outline {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.0625rem 0.4rem;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: rgba(242, 56, 111, 0.1);
+  border: 1px solid rgba(242, 56, 111, 0.35);
+  color: var(--color-nova-accent);
+}
+
+/* Status pills */
+.nova-pill-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgb(228 228 231);
+}
+.nova-pill-live::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+.nova-pill-draft {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: rgba(242, 56, 111, 0.08);
+  color: var(--color-nova-accent-soft);
+}
+.nova-pill-draft::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+/* Section-label pill (boxed/filled variant, e.g. plan tier tags). */
+/* Exact values via getComputedStyle against live tenji.ai/app/templates, 2026-07-21 —
+   category pills there are neutral grey, not pink-accented. */
+.nova-pill-label {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(161, 145, 153, 0.8);
+}
+
+/* Section eyebrow label (COMMAND / AGENCY / etc + page eyebrows) */
+/* Verified via getComputedStyle against a live tenji.ai eyebrow label: 12px/400/0.2em
+   tracking, uppercase, rgb(255 143 165) — brighter/lighter pink than the old guess, and
+   NOT semibold (Tenji's is regular weight, letter-spacing carries the emphasis instead). */
+.nova-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(255 143 165);
+}
+/* Stat-card labels ("RECURRING REVENUE", "TOTAL LEADS", ...) — distinct from the
+   section-header eyebrow above (12px/pink/0.2em). Two variants confirmed via direct
+   getComputedStyle probing (2026-07-21, live tenji.ai/app) — the big highlighted card
+   (Recurring Revenue) and the small stat cards use DIFFERENT tracking/color, not one
+   shared style: big = white/70 + 0.18em, small = muted-foreground/80 + 0.14em. */
+.nova-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground) / 0.8);
+}
+.nova-stat-label-lg {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+/* Big-card value ("$0", credits number) — 52px gradient-clip number, exact size/weight/
+   font/tabular-nums confirmed via getComputedStyle; exact gradient stops for the number
+   itself weren't in the extracted spec, reused the confirmed accent gradient rather than
+   guess new stops. Small-card value ("0" under Total Leads etc.) is flat-colored, not
+   gradient-clipped — confirmed separately via direct probe, 2026-07-21. */
+.nova-stat-value-lg {
+  margin-top: 0.375rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 52px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  background-image: linear-gradient(110deg, rgb(255, 143, 176), rgb(242, 56, 111), rgb(255, 209, 224), rgb(255, 92, 153), rgb(255, 143, 176));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.nova-stat-value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.2;
+  color: rgb(103, 91, 97);
+}
+/* Credits Left's number: unlike Recurring Revenue, this card isn't the highlighted/
+   pink-ring style, and its gradient-clip status wasn't in the extracted spec — rendered
+   as a plain bold white number rather than assuming the same gradient treatment applies. */
+.nova-stat-value-plain {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1;
+  color: #fff;
+}
+
+/* Stat card — dark charcoal, icon tile top-left, label+value, subtle border. */
+/* Exact values from reference/tenji-computed-styles.md: rounded-2xl (16px), and the
+   "border" is really a 1px hairline ring drawn via box-shadow, not a border property. */
+.nova-stat-card {
+  border-radius: 1rem;
+  padding: 20px; /* p-5, small stat cards + Credits Left */
+  background: linear-gradient(rgb(12, 12, 16), rgb(7, 7, 10));
+  box-shadow:
+    rgba(255, 255, 255, 0.06) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0.42) 0px 8px 22px 0px,
+    rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset;
+}
+/* Recurring Revenue is the one stat card with the pink-ringed "active" treatment and a
+   wider p-6 (24px) pad — everything else about .nova-stat-card still applies. */
+.nova-stat-card.nova-card-active {
+  padding: 24px;
+  background: linear-gradient(150deg, rgba(55, 6, 27, 0.55) 0%, rgb(10, 10, 13) 55%, rgb(7, 7, 10) 100%);
+  box-shadow:
+    rgba(244, 42, 126, 0.35) 0px 0px 0px 1px,
+    rgba(0, 0, 0, 0.5) 0px 14px 36px 0px,
+    rgba(247, 110, 167, 0.18) 0px 1px 0px 0px inset;
+}
+
+/* Input focus recipe: border-[#F2386F]/60 on focus. */
+.nova-input-focus:focus {
+  border-color: rgb(242 56 111 / 0.6);
+  outline: none;
+}
+
+/* ============================================================================
+   From the actual decompiled Tenji bundle (reference/tenji-frontend-components.js,
+   2026-07-21) — literal class names/keyframes used by Dashboard/hero, not a
+   screenshot approximation. `glass-panel` is Tenji's real hero/card surface
+   class; `animate-grid-drift-slow` + `dash-petal` are the literal animation
+   names referenced in the decompiled JSX.
+   ============================================================================ */
+/* Exact values from a direct live probe of two real glass-panel instances (dashboard hero
+   card + the Pipeline card, 2026-07-21, both agree): the background is a subtle 2-stop
+   translucent-WHITE gradient and there is NO box-shadow on the class itself — both were
+   wrong before (a dark saturated gradient + an inset/drop shadow that don't exist on the
+   real class; any darker look on a given instance comes from that instance's own separate
+   background layer, not from glass-panel). */
+.glass-panel {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none;
+}
+
+@keyframes grid-drift-slow {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(40px, 40px, 0); }
+}
+.animate-grid-drift-slow {
+  animation: grid-drift-slow 18s linear infinite;
+}
+
+@keyframes dash-petal {
+  0% { transform: translateY(-20px) translateX(0) rotate(0deg); opacity: 0; }
+  12% { opacity: 0.6; }
+  88% { opacity: 0.6; }
+  100% { transform: translateY(340px) translateX(46px) rotate(540deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-grid-drift-slow,
+  [style*='dash-petal'] {
+    animation: none !important;
+  }
+}
+
+/* Subtle shimmer sweep, used on the primary hero CTA (Tenji's decompiled JSX
+   animates this via framer-motion; framer-motion isn't installed here, so this
+   is the equivalent as a pure CSS animation on ::after instead of a JS-driven div). */
+@keyframes btn-sheen {
+  0% { transform: translateX(-150%); }
+  100% { transform: translateX(150%); }
+}
+.nova-btn-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.nova-btn-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: btn-sheen 2.5s ease-in-out infinite;
+  animation-delay: 1s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nova-btn-sheen::after {
+    animation: none;
+  }
+}
+
+/* Animated gradient text (headline name/keywords, e.g. "Good morning, <name>"). */
+/* Exact 5-stop gradient from reference/tenji-computed-styles.md (was a 3-stop HSL guess). */
+.animated-gradient-text {
+  background-image: linear-gradient(
+    110deg,
+    rgb(255, 143, 176), rgb(242, 56, 111), rgb(255, 209, 224), rgb(255, 92, 153), rgb(255, 143, 176)
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: 600;
+  animation: gradient-text-pan 4s linear infinite;
+}
+@keyframes gradient-text-pan {
+  to { background-position: 200% center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animated-gradient-text {
+    animation: none;
+  }
+}
+
+/* ============================================================================
+   LEAD SEARCH — exact recipe, owner T4. Pulled via getComputedStyle directly
+   against the real live tenji.ai/app/leads (2026-07-21), not re-derived from a
+   screenshot. Field/label/chip/toggle values only — the CTA button already
+   reuses `.nova-btn-primary`, independently confirmed exact against the
+   Dashboard hero button.
+   ============================================================================ */
+.nova-search-input {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(255, 255, 255);
+  background-color: rgba(5, 5, 7, 0.85);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  padding: 12px 16px 12px 40px;
+  height: 46px;
+}
+.nova-search-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.68px;
+  color: rgb(161, 145, 153);
+  text-transform: uppercase;
+}
+.nova-suggestion-chip {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgb(161, 145, 153);
+  background-color: transparent;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 14px;
+  height: 30px;
+  box-shadow: rgba(255, 255, 255, 0.05) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.3) 0px 2px 6px 0px;
+}
+/* Active toggle keeps a TRANSPARENT background — it's the pink border + glow
+   that reads as "active", not a solid fill (confirmed, this was the one real
+   surprise in the diff: not just a color swap on the same recipe). */
+.nova-toggle-pill {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(161, 145, 153);
+  background-color: rgba(6, 6, 9, 0.8);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 20px;
+  height: 30px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2.17px 6.52px 0px inset;
+}
+.nova-toggle-pill-active {
+  color: rgb(255, 255, 255);
+  background-color: transparent;
+  border: 1px solid rgba(247, 110, 167, 0.6);
+  box-shadow: rgba(244, 42, 126, 0.4) 0px 0px 19.55px 0px, rgba(255, 255, 255, 0.25) 0px 1.09px 0px 0px inset;
+}
+
+/* Empty-state icon tile (CRM/Clients/Tasks/FollowUps "no records yet" cards) — exact
+   values via getComputedStyle against live tenji.ai/app/crm, 2026-07-21. Distinct from
+   `.nova-icon-tile` (solid gradient fill, used on stat cards/quick actions) — empty
+   states use a much lighter tinted-outline tile instead. */
+.nova-empty-icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background-color: rgba(244, 42, 126, 0.1);
+  border: 1px solid rgba(244, 42, 126, 0.2);
+  color: rgb(255, 143, 165);
+}
+/* Empty-state card — solid (not dashed) border, exact per live probe. */
+.nova-empty-card {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 48px;
+  text-align: center;
+}
+/* Dark solid search/filter input fill (not transparent) — exact per live probe. */
+.nova-solid-input {
+  background-color: rgb(11, 11, 15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}

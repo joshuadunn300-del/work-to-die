@@ -1,0 +1,4 @@
+[
+  { "business_name": "Riverside Plumbing Co", "phone": "(555) 011-2234", "website": null, "address": "482 Elm St, Austin, TX", "rating": 4.6, "review_count": 87, "maps_url": "#", "place_id": "p1", "website_status": "none", "niche": "plumbing", "location_searched": "Austin, TX" },
+  { "business_name": "Summit Roofing & Restoration", "phone": "(555) 018-9931", "website": "summitroofing.example", "address": "19 Ridge Rd, Denver, CO", "rating": 4.2, "review_count": 143, "maps_url": "#", "place_id": "p2", "website_status": "poor", "niche": "roofer", "location_searched": "Denver, CO" }
+]

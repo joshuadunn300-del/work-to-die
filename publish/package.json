@@ -1,0 +1,12 @@
+{
+  "name": "nova-publish",
+  "version": "0.1.0",
+  "private": true,
+  "description": "content_json -> static HTML compiler + preview publish server for Nova (Tenji clone)",
+  "main": "server.js",
+  "scripts": {
+    "test": "node test/run.js && node test/run-e2e.js",
+    "exit-test": "node test/exit-test.js",
+    "serve": "node server.js"
+  }
+}
