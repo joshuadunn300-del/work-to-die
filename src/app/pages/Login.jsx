@@ -106,22 +106,7 @@ export default function Login() {
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={() => loginWithGoogle()}
-            className="mt-8 w-full flex items-center justify-center gap-2.5 rounded-xl border border-white/10 bg-white/5 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10"
-          >
-            <GoogleIcon />
-            Continue with Google
-          </button>
-
-          <div className="my-6 flex items-center gap-3">
-            <div className="h-px flex-1 bg-white/10" />
-            <span className="text-xs tracking-wide text-white/40">OR</span>
-            <div className="h-px flex-1 bg-white/10" />
-          </div>
-
-          <div className="relative mb-3">
+          <div className="relative mt-8 mb-3">
             <Mail size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30" />
             <input
               id="email"
